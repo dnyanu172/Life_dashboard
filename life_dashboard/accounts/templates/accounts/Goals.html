@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashborad.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>📊 Life Dashboard</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}" class="logout">Dashboard</a></li>
+            <li><a href="{% url 'expenses' %}" class="logout">Expenses Tracker</a></li>
+            <li><a href="{% url 'study' %}" class="logout">Study Tracker</a></li>
+            <li><a href="{% url 'habit' %}"  class="logout">Habits Tracker</a></li>
+            <li><a href="{% url 'calendar' %}" class="logout" >Calendar</a></li>
+            <li class="active"><a href="{% url 'goals' %}" class="logout" >Goals</a></li>
+            <li><a href="{% url 'reports' %}" class="logout" >Reports</a></li>
+            <li><a href="{% url 'settings' %}" class="logout">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+    <!-- MAIN -->
+ <div class="main">
+
+    <h1>
+        Welcome {{ request.user.username }} 👋
+    </h1>
+
+    <h1>
+        Goals
+    </h1>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="cards">
+
+        <div class="card green">
+
+            <h3>Total Goals</h3>
+
+            <h2>
+                {{ total_goals }}
+            </h2>
+
+        </div>
+
+
+        <div class="card blue">
+
+            <h3>Completed</h3>
+
+            <h2>
+                {{ completed_goals }}
+            </h2>
+
+        </div>
+
+
+        <div class="card orange">
+
+            <h3>In Progress</h3>
+
+            <h2>
+                {{ progress_goals }}
+            </h2>
+
+        </div>
+
+
+        <div class="card purple">
+
+            <h3>Not Started</h3>
+
+            <h2>
+                {{ pending_goals }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD / EDIT GOAL -->
+
+    <div class="box">
+
+        {% if editing %}
+
+            <h2>✏️ Edit Goal</h2>
+
+        {% else %}
+
+            <h2>➕ Add Goal</h2>
+
+        {% endif %}
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <p>
+                <label>Goal Title</label>
+                <br>
+                {{ form.title }}
+            </p>
+
+
+            <p>
+                <label>Description</label>
+                <br>
+                {{ form.description }}
+            </p>
+
+
+            <p>
+                <label>Target Date</label>
+                <br>
+                {{ form.target_date }}
+            </p>
+
+
+            <p>
+                <label>Status</label>
+                <br>
+                {{ form.status }}
+            </p>
+
+
+            {% if editing %}
+
+                <button type="submit">
+                    Update Goal
+                </button>
+
+                <a href="{% url 'goals' %}">
+                    Cancel
+                </a>
+
+            {% else %}
+
+                <button type="submit">
+                    Save Goal
+                </button>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+
+
+    <!-- GOALS TABLE -->
+
+    <div class="box">
+
+        <h2>
+            My Goals
+        </h2>
+
+
+        {% if goals %}
+
+        <table
+            border="1"
+            width="100%"
+            cellpadding="10"
+            cellspacing="0"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Goal</th>
+
+                    <th>Description</th>
+
+                    <th>Target Date</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for goal in goals %}
+
+                <tr>
+
+                    <td>
+                        {{ goal.title }}
+                    </td>
+
+                    <td>
+                        {{ goal.description }}
+                    </td>
+
+                    <td>
+                        {{ goal.target_date|date:"d M Y" }}
+                    </td>
+
+                    <td>
+                        {{ goal.status }}
+                    </td>
+
+                    <td>
+
+                        <a href="{% url 'edit_goal' goal.id %}" class="Edit">
+                            ✏️ Edit
+                        </a>
+
+                        &nbsp;&nbsp;
+
+                        <form
+                            method="POST"
+                            action="{% url 'delete_goal' goal.id %}"
+                            style="display:inline;"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                onclick="return confirm('Are you sure you want to delete this goal?');"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p>
+                No goals yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

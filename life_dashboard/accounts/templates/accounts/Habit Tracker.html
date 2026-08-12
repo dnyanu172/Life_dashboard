@@ -1,0 +1,301 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashborad.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <<div class="sidebar">
+        <h2>📊 Life Dashboard</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}" class="logout">Dashboard</a></li>
+            <li><a href="{% url 'expenses' %}" class="logout">Expenses Tracker</a></li>
+            <li><a href="{% url 'study' %}" class="logout">Study Tracker</a></li>
+            <li class="active"><a href="{% url 'habit' %}"  class="logout">Habits Tracker</a></li>
+            <li><a href="{% url 'calendar' %}" class="logout" >Calendar</a></li>
+            <li><a href="{% url 'goals' %}" class="logout" >Goals</a></li>
+            <li><a href="{% url 'reports' %}" class="logout" >Reports</a></li>
+            <li><a href="{% url 'settings' %}" class="logout">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+    <h1>
+        Welcome {{ request.user.username }} 👋
+    </h1>
+
+    <h1>
+        Habit Tracker
+    </h1>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="cards">
+
+        <div class="card green">
+
+            <h3>Total Habits</h3>
+
+            <h2>
+                {{ total_habits }}
+            </h2>
+
+        </div>
+
+
+        <div class="card blue">
+
+            <h3>Completed</h3>
+
+            <h2>
+                {{ completed_habits }}
+            </h2>
+
+        </div>
+
+
+        <div class="card orange">
+
+            <h3>In Progress</h3>
+
+            <h2>
+                {{ progress_habits }}
+            </h2>
+
+        </div>
+
+
+        <div class="card purple">
+
+            <h3>Pending</h3>
+
+            <h2>
+                {{ pending_habits }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD / EDIT HABIT -->
+
+    <div class="box">
+
+        {% if editing %}
+
+            <h2>✏️ Edit Habit</h2>
+
+        {% else %}
+
+            <h2>➕ Add Habit</h2>
+
+        {% endif %}
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <p>
+
+                <label>
+                    Habit Name
+                </label>
+
+                <br>
+
+                {{ form.name }}
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Description
+                </label>
+
+                <br>
+
+                {{ form.description }}
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Date
+                </label>
+
+                <br>
+
+                {{ form.date }}
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Status
+                </label>
+
+                <br>
+
+                {{ form.status }}
+
+            </p>
+
+
+            {% if editing %}
+
+                <button type="submit">
+                    Update Habit
+                </button>
+
+                <a href="{% url 'habit' %}">
+                    Cancel
+                </a>
+
+            {% else %}
+
+                <button type="submit">
+                    Save Habit
+                </button>
+
+            {% endif %}
+
+        </form>
+
+    </div>
+<br>
+
+    <!-- HABIT TABLE -->
+
+    <div class="box">
+
+        <h2>
+            My Habits
+        </h2>
+
+
+        {% if habits %}
+
+        <table
+            border="1"
+            width="100%"
+            cellpadding="10"
+            cellspacing="0"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Habit</th>
+
+                    <th>Description</th>
+
+                    <th>Date</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for habit in habits %}
+
+                <tr>
+
+                    <td>
+                        {{ habit.name }}
+                    </td>
+
+
+                    <td>
+                        {{ habit.description }}
+                    </td>
+
+
+                    <td>
+                        {{ habit.date|date:"d M Y" }}
+                    </td>
+
+
+                    <td>
+                        {{ habit.status }}
+                    </td>
+
+
+                    <td>
+
+                        <a href="{% url 'edit_habit' habit.id %}" class="Edit">
+                            ✏️ Edit
+                        </a>
+
+
+                        &nbsp;&nbsp;
+
+
+                        <form
+                            method="POST"
+                            action="{% url 'delete_habit' habit.id %}"
+                            style="display:inline;"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                onclick="return confirm('Are you sure you want to delete this habit?');"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p>
+                No habits yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

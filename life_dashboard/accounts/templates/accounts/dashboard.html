@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashborad.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>📊 Life Dashboard</h2>
+        <ul>
+            <li class="active"><a href="{% url 'dashboard' %}" class="logout">Dashboard</a></li>
+            <li><a href="{% url 'expenses' %}" class="logout">Expenses Tracker</a></li>
+            <li><a href="{% url 'study' %}" class="logout">Study Tracker</a></li>
+            <li><a href="{% url 'habit' %}"  class="logout">Habits Tracker</a></li>
+            <li><a href="{% url 'calendar' %}" class="logout" >Calendar</a></li>
+            <li><a href="{% url 'goals' %}" class="logout" >Goals</a></li>
+            <li><a href="{% url 'reports' %}" class="logout" >Reports</a></li>
+            <li><a href="{% url 'settings' %}" class="logout">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+
+<div class="main">
+
+    <h1>
+        Welcome {{ name }} 👋
+    </h1>
+
+    <p>
+        Here's your life dashboard overview.
+    </p>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="cards">
+
+
+        <!-- EXPENSE -->
+
+        <div class="card green">
+
+            <h3>
+                💰 Total Expenses
+            </h3>
+
+            <h2>
+                ₹{{ total_expenses }}
+            </h2>
+
+            <p>
+                Today: ₹{{ today_expenses }}
+            </p>
+
+        </div>
+
+
+        <!-- GOALS -->
+
+        <div class="card blue">
+
+            <h3>
+                🎯 Goals
+            </h3>
+
+            <h2>
+                {{ total_goals }}
+            </h2>
+
+            <p>
+                Completed: {{ completed_goals }}
+            </p>
+
+        </div>
+
+
+        <!-- HABITS -->
+
+        <div class="card orange">
+
+            <h3>
+                🔥 Habits
+            </h3>
+
+            <h2>
+                {{ total_habits }}
+            </h2>
+
+            <p>
+                Completed: {{ completed_habits }}
+            </p>
+
+        </div>
+
+
+        <!-- STUDY -->
+
+        <div class="card purple">
+
+            <h3>
+                📚 Study</h3>
+
+            <h2>
+                {{ total_study_records }}
+            </h2>
+
+            <p>
+                Study Records
+            </p>
+
+        </div>
+
+    </div>
+<br>
+
+    <!-- QUICK ACCESS -->
+
+    <div class="box">
+
+        <h2>
+            ⚡ Quick Access
+        </h2>
+
+        <p>
+            <a href="{% url 'expenses' %}" class="Edit">
+                💰 Manage Expenses
+            </a>
+        </p>
+
+        <p>
+            <a href="{% url 'study' %}" class="Edit">
+                📚 Manage Study
+            </a>
+        </p>
+
+        <p>
+            <a href="{% url 'habit' %}" class="Edit">
+                🔥 Manage Habits
+            </a>
+        </p>
+
+        <p>
+            <a href="{% url 'goals' %}" class="Edit">
+                🎯 Manage Goals
+            </a>
+        </p>
+
+        <p>
+            <a href="{% url 'calendar' %}" class="Edit">
+                📅 Open Calendar
+            </a>
+        </p>
+
+    </div>
+
+<br>
+    <!-- RECENT EXPENSES -->
+
+    <div class="box">
+
+        <h2>
+            💰 Recent Expenses
+        </h2>
+
+
+        {% if recent_expenses %}
+
+        <table
+            border="1"
+            width="100%"
+            cellpadding="10"
+            cellspacing="0"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Title</th>
+
+                    <th>Amount</th>
+
+                    <th>Category</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for expense in recent_expenses %}
+
+                <tr>
+
+                    <td>
+                        {{ expense.title }}
+                    </td>
+
+                    <td>
+                        ₹{{ expense.amount }}
+                    </td>
+
+                    <td>
+                        {{ expense.category }}
+                    </td>
+
+                    <td>
+                        {{ expense.date|date:"d M Y" }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <p>
+
+            <a href="{% url 'expenses' %}" class="Edit">
+                View All Expenses →
+            </a>
+
+        </p>
+
+
+        {% else %}
+
+        <p>
+            No expenses added yet.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+<br>
+    <!-- OVERVIEW -->
+
+    <div class="box">
+
+        <h2>
+            📊 Your Progress
+        </h2>
+
+        <p>
+            🎯 Goals:
+            {{ completed_goals }} / {{ total_goals }} completed
+        </p>
+
+        <p>
+            🔥 Habits:
+            {{ completed_habits }} / {{ total_habits }} completed
+        </p>
+
+        <p>
+            📚 Study:
+            {{ total_study_records }} records
+        </p>
+
+        <p>
+            💰 Total Expenses:
+            ₹{{ total_expenses }}
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

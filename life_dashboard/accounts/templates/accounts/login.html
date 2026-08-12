@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <img src="{% static 'image/logo.jpeg' %}" class="logo">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input type="text" name="username" placeholder="Username" class="input">
+            <input type="password" name="password" placeholder="Password" class="input">
+
+
+            <button class="btn" type="submit">Login → </button>
+        </form>
+
+        <p class="footer">
+            Don’t have an account?
+            <a href="{% url 'register' %}">Register</a>
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

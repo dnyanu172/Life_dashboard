@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashborad.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>📊 Life Dashboard</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}" class="logout">Dashboard</a></li>
+            <li><a href="{% url 'expenses' %}" class="logout">Expenses Tracker</a></li>
+            <li><a href="{% url 'study' %}" class="logout">Study Tracker</a></li>
+            <li><a href="{% url 'habit' %}"  class="logout">Habits Tracker</a></li>
+            <li><a href="{% url 'calendar' %}" class="logout" >Calendar</a></li>
+            <li><a href="{% url 'goals' %}" class="logout" >Goals</a></li>
+            <li class="active"><a href="{% url 'reports' %}" class="logout" >Reports</a></li>
+            <li><a href="{% url 'settings' %}" class="logout">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+ <div class="main">
+
+    <h1>
+        Welcome {{ request.user.username }} 👋
+    </h1>
+
+    <h1>
+        Reports
+    </h1>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="cards">
+
+        <div class="card green">
+
+            <h3>Total Expenses</h3>
+
+            <h2>
+                ₹{{ total_expenses }}
+            </h2>
+
+        </div>
+
+
+        <div class="card blue">
+
+            <h3>Study Records</h3>
+
+            <h2>
+                {{ total_study_records }}
+            </h2>
+
+        </div>
+
+
+        <div class="card orange">
+
+            <h3>Completed Habits</h3>
+
+            <h2>
+                {{ completed_habits }}
+            </h2>
+
+        </div>
+
+
+        <div class="card purple">
+
+            <h3>Completed Goals</h3>
+
+            <h2>
+                {{ completed_goals }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- HABIT REPORT -->
+
+    <div class="box">
+
+        <h2>
+            📈 Habit Report
+        </h2>
+
+        <p>
+            Total Habits:
+            <strong>{{ total_habits }}</strong>
+        </p>
+
+        <p>
+            Completed:
+            <strong>{{ completed_habits }}</strong>
+        </p>
+
+        <p>
+            In Progress:
+            <strong>{{ progress_habits }}</strong>
+        </p>
+
+        <p>
+            Pending:
+            <strong>{{ pending_habits }}</strong>
+        </p>
+
+    </div>
+
+<br>
+    <!-- GOAL REPORT -->
+
+    <div class="box">
+
+        <h2>
+            🎯 Goal Report
+        </h2>
+
+        <p>
+            Total Goals:
+            <strong>{{ total_goals }}</strong>
+        </p>
+
+        <p>
+            Completed:
+            <strong>{{ completed_goals }}</strong>
+        </p>
+
+        <p>
+            In Progress:
+            <strong>{{ progress_goals }}</strong>
+        </p>
+
+        <p>
+            Not Started:
+            <strong>{{ pending_goals }}</strong>
+        </p>
+
+    </div>
+
+<br>
+    <!-- EXPENSE REPORT -->
+
+    <div class="box">
+
+        <h2>
+            💰 Recent Expenses
+        </h2>
+
+
+        {% if expenses %}
+
+        <table
+            border="1"
+            width="100%"
+            cellpadding="10"
+            cellspacing="0"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Title</th>
+
+                    <th>Amount</th>
+
+                    <th>Category</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for expense in expenses %}
+
+                <tr>
+
+                    <td>
+                        {{ expense.title }}
+                    </td>
+
+                    <td>
+                        ₹{{ expense.amount }}
+                    </td>
+
+                    <td>
+                        {{ expense.category }}
+                    </td>
+
+                    <td>
+                        {{ expense.date|date:"d M Y" }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <p>
+                No expenses available.
+            </p>
+
+        {% endif %}
+
+    </div>
+<br>
+
+    <!-- STUDY REPORT -->
+
+    <div class="box">
+
+        <h2>
+            📚 Study Report
+        </h2>
+
+        <p>
+            Total Study Records:
+            <strong>{{ total_study_records }}</strong>
+        </p>
+
+        <p>
+            Total Study Hours:
+            <strong>{{ total_study_hours }}</strong>
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashborad.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>📊 Life Dashboard</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}" class="logout">Dashboard</a></li>
+            <li><a href="{% url 'expenses' %}" class="logout">Expenses Tracker</a></li>
+            <li><a href="{% url 'study' %}" class="logout">Study Tracker</a></li>
+            <li><a href="{% url 'habit' %}"  class="logout">Habits Tracker</a></li>
+            <li><a href="{% url 'calendar' %}" class="logout" >Calendar</a></li>
+            <li><a href="{% url 'goals' %}" class="logout" >Goals</a></li>
+            <li><a href="{% url 'reports' %}" class="logout" >Reports</a></li>
+            <li class="active"><a href="{% url 'settings' %}" class="logout">Settings</a></li>
+            <li><a href="{% url 'logout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+ <div class="main">
+
+    <h1>
+        Welcome {{ user.username }} 👋
+    </h1>
+
+    <h1>
+        Settings
+    </h1>
+
+    <!-- SUCCESS MESSAGE -->
+
+    {% if message %}
+
+        <div class="box">
+
+            <p>
+                ✅ {{ message }}
+            </p>
+
+        </div>
+
+    {% endif %}
+<br>
+
+    <!-- ERROR MESSAGE -->
+
+    {% if error %}
+
+        <div class="box">
+
+            <p>
+                ❌ {{ error }}
+            </p>
+
+        </div>
+
+    {% endif %}
+
+<br>
+    <!-- PROFILE SETTINGS -->
+
+    <div class="box">
+
+        <h2>
+            👤 Profile Settings
+        </h2>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="action"
+                value="profile"
+            >
+
+
+            <p>
+
+                <label>
+                    Username
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    value="{{ user.username }}"
+                    class="form-control"
+                    readonly
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    First Name
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    name="first_name"
+                    value="{{ user.first_name }}"
+                    class="form-control"
+                    placeholder="Enter first name"
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Last Name
+                </label>
+
+                <br>
+
+                <input
+                    type="text"
+                    name="last_name"
+                    value="{{ user.last_name }}"
+                    class="form-control"
+                    placeholder="Enter last name"
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Email
+                </label>
+
+                <br>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ user.email }}"
+                    class="form-control"
+                    placeholder="Enter email"
+                >
+
+            </p>
+
+
+            <button type="submit">
+                Save Profile
+            </button>
+
+        </form>
+
+    </div>
+
+<br>
+    <!-- PASSWORD SETTINGS -->
+
+    <div class="box">
+
+        <h2>
+            🔐 Change Password
+        </h2>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="action"
+                value="password"
+            >
+
+
+            <p>
+
+                <label>
+                    Current Password
+                </label>
+
+                <br>
+
+                <input
+                    type="password"
+                    name="current_password"
+                    class="form-control"
+                    placeholder="Enter current password"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    New Password
+                </label>
+
+                <br>
+
+                <input
+                    type="password"
+                    name="new_password"
+                    class="form-control"
+                    placeholder="Enter new password"
+                    required
+                >
+
+            </p>
+
+
+            <p>
+
+                <label>
+                    Confirm New Password
+                </label>
+
+                <br>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                    class="form-control"
+                    placeholder="Confirm new password"
+                    required
+                >
+
+            </p>
+
+
+            <button type="submit">
+                Change Password
+            </button>
+
+        </form>
+
+    </div>
+
+<br>
+    <!-- ACCOUNT INFORMATION -->
+
+    <div class="box">
+
+        <h2>
+            ℹ️ Account Information
+        </h2>
+
+        <p>
+            Username:
+            <strong>{{ user.username }}</strong>
+        </p>
+
+        <p>
+            Email:
+            <strong>
+                {% if user.email %}
+                    {{ user.email }}
+                {% else %}
+                    Not provided
+                {% endif %}
+            </strong>
+        </p>
+
+        <p>
+            Account created:
+            <strong>
+                {{ user.date_joined|date:"d M Y" }}
+            </strong>
+        </p>
+
+    </div>
+<br>
+    <!-- LOGOUT -->
+
+    <div class="box">
+
+        <h2>
+            🚪 Account
+        </h2>
+
+        <a href="{% url 'logout' %}" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>
